@@ -1,23 +1,29 @@
 public class Player {
 
     private String name;
-    private int indexPointPlayer;
+    private String pointPlayer;
+    private int pointTieBreakPlayer;
+    private int gameWon;
+    private int setWon;
 
     public Player(String name) {
         this.name = name;
-        this.indexPointPlayer = 0;
+        this.pointPlayer = "0";
+        this.pointTieBreakPlayer = 0;
+        this.gameWon = 0;
+        this.setWon = 0;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getIndexPointPlayer() {
-        return indexPointPlayer;
+    public String getPointPlayer() {
+        return pointPlayer;
     }
 
-    public void setIndexPointPlayer(int indexPointPlayer) {
-        this.indexPointPlayer = indexPointPlayer;
+    public void setPointPlayer(String pointPlayer) {
+        this.pointPlayer = pointPlayer;
     }
 
 
@@ -25,11 +31,40 @@ public class Player {
         return name;
     }
 
-    public void upIndexPlayer() {
-        this.indexPointPlayer++;
+    public void upPointPlayer() {
+        if(pointPlayer.equals("0")) {
+            this.setPointPlayer("15");
+        } else if (pointPlayer.equals("15")) {
+            this.setPointPlayer("30");
+        } else if (pointPlayer.equals("30")) {
+            this.setPointPlayer("40");
+        } else {
+            pointTieBreakPlayer++;
+        }
     }
 
-    public void downIndexPlayer() {
-        this.indexPointPlayer++;
+    public void downPointPlayer() {
+        this.setPointPlayer("40");
     }
+
+    public void upGameWon() {
+        this.gameWon++;
+    }
+
+    public int getGameWon() {
+        return gameWon;
+    }
+
+    public int getPointTieBreakPlayer() {
+        return pointTieBreakPlayer;
+    }
+
+    public void upSetWon() {
+        this.gameWon++;
+    }
+
+    public int getSetWon() {
+        return gameWon;
+    }
+
 }

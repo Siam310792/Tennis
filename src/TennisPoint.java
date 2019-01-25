@@ -1,9 +1,9 @@
 public enum TennisPoint {
     ZERO("0"),
-    FIFTEEN("1"),
-    THIRTY("2"),
-    FORTY("3"),
-    ADVANTAGE("4");
+    FIFTEEN("15"),
+    THIRTY("30"),
+    FORTY("40"),
+    ADVANTAGE("A");
 
     private final String pointName;
 
