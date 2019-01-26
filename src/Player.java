@@ -4,18 +4,14 @@ public class Player {
     private String pointPlayer;
     private int pointTieBreakPlayer;
     private int gameWon;
-    private int setWon;
+    private int nbSetWon;
 
     public Player(String name) {
         this.name = name;
         this.pointPlayer = "0";
         this.pointTieBreakPlayer = 0;
         this.gameWon = 0;
-        this.setWon = 0;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.nbSetWon = 0;
     }
 
     public String getPointPlayer() {
@@ -60,11 +56,15 @@ public class Player {
     }
 
     public void upSetWon() {
-        this.gameWon++;
+        this.nbSetWon++;
     }
 
     public int getSetWon() {
-        return gameWon;
+        return nbSetWon;
+    }
+
+    public void setGameWon(int nb) {
+        this.gameWon = nb;
     }
 
 }

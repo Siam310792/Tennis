@@ -4,7 +4,6 @@ import java.util.List;
 
 public class TennisGame {
 
-    //private List<TennisPoint> pointList;
     private Player player1;
     private Player player2;
 
@@ -14,17 +13,24 @@ public class TennisGame {
     }
 
     public boolean upPoint(Player player) {
-        if(player.getName() == player1.getName()) {
+        if(player.equals(player1)) {
             if(player1.getPointPlayer() == TennisPoint.FORTY.toString()) {
                 if(player2.getPointPlayer() == TennisPoint.ADVANTAGE.toString()) {
                     player2.downPointPlayer();
+                    return false;
                 } else if (player2.getPointPlayer() == TennisPoint.FORTY.toString()) {
                     player1.setPointPlayer(TennisPoint.ADVANTAGE.toString());
+                    return false;
                 } else {
-                    player1.upPointPlayer();
+                    player1.upGameWon();
+                    player1.setPointPlayer("0");
+                    player2.setPointPlayer("0");
+                    return true;
                 }
-                return false;
             } else if (player1.getPointPlayer() == TennisPoint.ADVANTAGE.toString()) {
+                player1.upGameWon();
+                player1.setPointPlayer("0");
+                player2.setPointPlayer("0");
                 return true;
             } else {
                 player1.upPointPlayer();
@@ -34,13 +40,20 @@ public class TennisGame {
             if(player2.getPointPlayer() == TennisPoint.FORTY.toString()) {
                 if (player1.getPointPlayer() == TennisPoint.ADVANTAGE.toString()) {
                     player1.downPointPlayer();
-                } else if (player2.getPointPlayer() == TennisPoint.FORTY.toString()) {
+                    return false;
+                } else if (player1.getPointPlayer() == TennisPoint.FORTY.toString()) {
                     player2.setPointPlayer(TennisPoint.ADVANTAGE.toString());
+                    return false;
                 } else {
-                    player2.upPointPlayer();
+                    player2.upGameWon();
+                    player1.setPointPlayer("0");
+                    player2.setPointPlayer("0");
+                    return true;
                 }
-                return false;
             } else if (player2.getPointPlayer() == TennisPoint.ADVANTAGE.toString()) {
+                player2.upGameWon();
+                player1.setPointPlayer("0");
+                player2.setPointPlayer("0");
                 return true;
             } else {
                 player2.upPointPlayer();
