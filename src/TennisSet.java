@@ -53,23 +53,28 @@ public class TennisSet {
     }
 
     public boolean addPointToSetTieBreak(Player player) {
-        gameIsWon = tennisGame.upPoint(player);
-        if(gameIsWon) {
-            player.upGameWon();
-            if (player.equals(player1)) {
-                if (player.getGameWon() == 6 && player2.getGameWon() <= 4) {
-                    return true;
-                } else if (player.getGameWon() == 6 && player2.getGameWon() == 6) {
-                    gameIsWon = tennisGame.upPointTieBreak(player);
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (player.equals(player2)) {
-                if (player.getGameWon() == 6 && player1.getGameWon() <= 4) {
-                    return true;
-                } else if (player.getGameWon() > 6 && player.getGameWon() - player1.getGameWon() >= 2) {
-                    return true;
+        if(player.getGameWon() == 6 && player2.getGameWon() == 6) {
+            gameIsWon = tennisGame.upPointTieBreak(player);
+            if (gameIsWon) {
+                if (player1.equals(player1)) {
+                    if (player1.getGameWon() == 6 && player2.getGameWon() <= 4) {
+                        player1.upSetWon();
+                        player1.setGameWon(0);
+                        player2.setGameWon(0);
+                        return true;
+                    }
+
+                    else {
+                        return false;
+                    }
+                } else if (player.equals(player2)) {
+                    if (player.getGameWon() == 6 && player2.getGameWon() <= 4) {
+                        return true;
+                    } else if (player.getGameWon() == 6 && player2.getGameWon() == 6) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
@@ -77,7 +82,34 @@ public class TennisSet {
                 return false;
             }
         } else {
-            return false;
+            gameIsWon = tennisGame.upPoint(player);
+            if (gameIsWon) {
+                if (player1.equals(player1)) {
+                    if (player1.getGameWon() == 6 && player2.getGameWon() <= 4) {
+                        player1.upSetWon();
+                        player1.setGameWon(0);
+                        player2.setGameWon(0);
+                        return true;
+                    } else if (player.getGameWon() == 6 && player2.getGameWon() == 6) {
+                        gameIsWon = tennisGame.upPointTieBreak(player);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else if (player.equals(player2)) {
+                    if (player.getGameWon() == 6 && player2.getGameWon() <= 4) {
+                        return true;
+                    } else if (player.getGameWon() == 6 && player2.getGameWon() == 6) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
     }
 }

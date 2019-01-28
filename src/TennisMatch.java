@@ -22,28 +22,52 @@ public class TennisMatch {
 
     // Augmente le score (gain d'un point dans le jeu)
     public void updateWithPointWonBy(Player player) {
-        setIsWon = tennisSet.addPointToSet(player);
-
-        if(setIsWon) {
-            if (nbSet <= matchType.maxNumberOfSets()) {
-                if (player.equals(player1)) {
-                    if (player1.getSetWon() == matchType.numberOfSetsToWin()) {
-                        nbSet++;
-                        isFinished(player);
+        if(!tieBreakInLastSet) {
+            setIsWon = tennisSet.addPointToSet(player);
+            if(setIsWon) {
+                if (nbSet <= matchType.maxNumberOfSets()) {
+                    if (player.equals(player1)) {
+                        if (player1.getSetWon() == matchType.numberOfSetsToWin()) {
+                            nbSet++;
+                            isFinished(player);
+                        } else {
+                            nbSet++;
+                        }
                     } else {
-                        nbSet++;
+                        if (player2.getSetWon() == matchType.numberOfSetsToWin()) {
+                            nbSet++;
+                            isFinished(player);
+                        } else {
+                            nbSet++;
+                        }
                     }
-                } else {
-                    if (player2.getSetWon() == matchType.numberOfSetsToWin()) {
-                        nbSet++;
-                        isFinished(player);
-                    } else {
-                        nbSet++;
-                    }
+                    pointsForPlayer(player);
                 }
-                pointsForPlayer(player);
+            }
+        } else {
+            setIsWon = tennisSet.addPointToSetTieBreak(player);
+            if(setIsWon) {
+                if (nbSet <= matchType.maxNumberOfSets()) {
+                    if (player.equals(player1)) {
+                        if (player1.getSetWon() == matchType.numberOfSetsToWin()) {
+                            nbSet++;
+                            isFinished(player);
+                        } else {
+                            nbSet++;
+                        }
+                    } else {
+                        if (player2.getSetWon() == matchType.numberOfSetsToWin()) {
+                            nbSet++;
+                            isFinished(player);
+                        } else {
+                            nbSet++;
+                        }
+                    }
+                    pointsForPlayer(player);
+                }
             }
         }
+
 
     }
 
