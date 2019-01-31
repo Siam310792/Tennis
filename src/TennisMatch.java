@@ -1,4 +1,4 @@
-import static sun.misc.Version.println;
+import java.util.HashMap;
 
 public class TennisMatch {
 
@@ -9,7 +9,7 @@ public class TennisMatch {
     private TennisSet tennisSet;
     private boolean setIsWon;
     private boolean matchIsEnded = false;
-    private int nbSet = 0;
+    private int nbSet = 1;
 
     //Création du match
     public TennisMatch(Player player1, Player player2, MatchType matchType, boolean tieBreakInLastSet) {
@@ -23,57 +23,68 @@ public class TennisMatch {
     // Augmente le score (gain d'un point dans le jeu)
     public void updateWithPointWonBy(Player player) {
         if(!tieBreakInLastSet) {
-            setIsWon = tennisSet.addPointToSet(player);
+            setIsWon = tennisSet.addPointToSet(player, this.nbSet);
             if(setIsWon) {
                 if (nbSet <= matchType.maxNumberOfSets()) {
                     if (player.equals(player1)) {
                         if (player1.getSetWon() == matchType.numberOfSetsToWin()) {
-                            nbSet++;
                             isFinished(player);
                         } else {
                             nbSet++;
                         }
                     } else {
                         if (player2.getSetWon() == matchType.numberOfSetsToWin()) {
-                            nbSet++;
                             isFinished(player);
                         } else {
                             nbSet++;
                         }
                     }
-                    pointsForPlayer(player);
                 }
             }
         } else {
-            setIsWon = tennisSet.addPointToSetTieBreak(player);
+            setIsWon = tennisSet.addPointToSetTieBreak(player, this.nbSet);
             if(setIsWon) {
                 if (nbSet <= matchType.maxNumberOfSets()) {
                     if (player.equals(player1)) {
                         if (player1.getSetWon() == matchType.numberOfSetsToWin()) {
-                            nbSet++;
                             isFinished(player);
                         } else {
                             nbSet++;
                         }
                     } else {
                         if (player2.getSetWon() == matchType.numberOfSetsToWin()) {
-                            nbSet++;
                             isFinished(player);
                         } else {
                             nbSet++;
                         }
                     }
-                    pointsForPlayer(player);
+                    System.out.println(pointsForPlayer(player));
                 }
             }
         }
-
-
     }
 
     // Récupère sous chaîne de caractère le score dans le jeu en cours
     public String pointsForPlayer(Player player) {
-        return player.getPointPlayer();
+        String pointPlayer = "";
+        if (!tieBreakInLastSet) {
+            pointPlayer = player.getPointPlayer();
+        } else {
+            if (player.equals(player1)) {
+                if(player1.getGameWon() == 6 && player2.getGameWon() == 6) {
+                    pointPlayer = String.valueOf(player1.getPointPlayerTieBreak());
+                } else {
+                    pointPlayer = player.getPointPlayer();
+                }
+            } else {
+                if(player2.getGameWon() == 6 && player1.getGameWon() == 6) {
+                    pointPlayer = String.valueOf(player2.getPointPlayerTieBreak());
+                } else {
+                    pointPlayer = player.getPointPlayer();
+                }
+            }
+        }
+        return pointPlayer;
     }
 
     // Numéro du set (max 3 ou 5)
@@ -88,16 +99,32 @@ public class TennisMatch {
 
     // Nombre de jeu gagné dans le set demandé
     public int gamesInSetForPlayer(int setNumber, Player player) {
-        return 0;
+        HashMap<Integer, Integer> map = player.getHashMap();
+        int jeuxgagnes = map.get(setNumber);
+        return jeuxgagnes;
     }
 
     public boolean isFinished(Player player) {
-        System.out.println("Le joueur " + player.getName() + " a gagné !!!");
+        System.out.println("\n****************************************************\n" +
+                "Le joueur " + player.getName() + " a gagné la partie !!!\n" +
+                "****************************************************");
         return true;
     }
 
+    public void playerWinAGame(Player player) {
+        this.updateWithPointWonBy(player);
+        this.updateWithPointWonBy(player);
+        this.updateWithPointWonBy(player);
+        this.updateWithPointWonBy(player);
+    }
+
     public String toString() {
-        return "Le joueur '" + player1.getName() + "' a  " + player1.getPointPlayer() + " points, et a gagné " + player1.getGameWon() + " jeu dans le set actuel. Il a au total gagné " + player1.getSetWon() + " sets. \n" +
-                "Le joueur '" + player2.getName() + "' a  " + player2.getPointPlayer() + " points, et a gagné " + player2.getGameWon() + " jeu dans le set actuel. Il a au total gagné " + player2.getSetWon() + " sets.";
+        if (tieBreakInLastSet && (player1.getGameWon() == 6 && player2.getGameWon() == 6)){
+            return "Le joueur '" + player1.getName() + "' a  " + player1.getPointPlayerTieBreak() + " points dans le tiebreak du set actuel (" + this.currentSetNumber() + "). Il a au total gagné " + player1.getSetWon() + " sets. \n" +
+                    "Le joueur '" + player2.getName() + "' a  " + player2.getPointPlayerTieBreak() + " points dans le tiebreak du set actuel (" + this.currentSetNumber() + "). Il a au total gagné " + player2.getSetWon() + " sets.";
+        } else {
+            return "Le joueur '" + player1.getName() + "' a  " + player1.getPointPlayer() + " points, et a gagné " + player1.getGameWon() + " jeu dans le set actuel. Il a au total gagné " + player1.getSetWon() + " sets. \n" +
+                    "Le joueur '" + player2.getName() + "' a  " + player2.getPointPlayer() + " points, et a gagné " + player2.getGameWon() + " jeu dans le set actuel. Il a au total gagné " + player2.getSetWon() + " sets.";
+        }
     }
 }
